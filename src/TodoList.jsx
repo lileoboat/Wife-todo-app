@@ -1,8 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 function TodoList() {
-    const [todos, setTodos] = useState(["Wake up", "Call your Husband", "Pray together"]);
+    const [todos, setTodos] = useState(() => {
+        const savedTodos = localStorage.getItem("todoTasks");
+        return savedTodos ? JSON.parse(savedTodos) : ["Call your Husband", "Pray together", "Go to work"];
+    });
+
     const [newTodo, setNewTodo] = useState("");
+
+    useEffect(() => {
+        localStorage.setItem("todoTasks", JSON.stringify(todos));
+    }, [todos]);
 
 
     function handleTodoInput(event){
@@ -48,7 +56,13 @@ function TodoList() {
 
   return (
     <div className='todo-list'>
-        <h1>To-do List</h1>
+        <h1>Babes To-do List</h1>
+        <h2>Daily Suggestions</h2>
+        <ul className='suggestions'>
+            <li className='suggestion'>Call your Husband(Joseph❤️)</li>
+            <li className='suggestion'>Pray together</li>
+            <li className='suggestion'>Go to work</li>
+        </ul>
         <div>
             <input type="text" value={newTodo} onChange={handleTodoInput} placeholder='Add a to-do' />
             <button className='add-button' onClick={addTodo}>Add</button>
